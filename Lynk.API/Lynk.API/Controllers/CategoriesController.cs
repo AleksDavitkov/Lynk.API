@@ -1,7 +1,5 @@
-﻿using Lynk.API.DataAccess.Data;
-using Lynk.API.DataAccess.Repositories.Abstractions;
-using Lynk.API.Domain.Entities;
-using Lynk.API.Dtos.CategoryDtos;
+﻿using Lynk.API.Dtos.CategoryDtos;
+using Lynk.API.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,34 +10,17 @@ namespace Lynk.API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository categoryRepository;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(ICategoryRepository categoryRepository)
+        public CategoriesController(ICategoryService categoryService)
         {
-            this.categoryRepository = categoryRepository;
+            _categoryService = categoryService;
         }
 
-        // TBD; missing service layer instead of handling it directly in the controller.
-        // proper try/catch with custom exceptions and a global exception handling middleware.
-        // still deciding how much to expand the application’s architecture and layering at this stage.
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
         {
-            var category = new Category
-            {
-                Name = request.Name,
-                UrlHandle = request.UrlHandle
-            };
-
-            await categoryRepository.CreateAsync(category);
-
-            var response = new CategoryDto
-            {
-                Id = category.Id,
-                Name = category.Name,
-                UrlHandle = category.UrlHandle
-            };
-
+            var response = await _categoryService.CreateCategoryAsync(request);
             return Ok(response);
         }
     }

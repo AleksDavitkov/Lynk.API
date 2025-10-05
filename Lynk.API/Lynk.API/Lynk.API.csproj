@@ -26,6 +26,8 @@
     <ProjectReference Include="..\Lynk.API.DataAccess\Lynk.API.DataAccess.csproj" />
     <ProjectReference Include="..\Lynk.API.Dtos\Lynk.API.Dtos.csproj" />
     <ProjectReference Include="..\Lynk.API.Helpers\Lynk.API.Helpers.csproj" />
+    <ProjectReference Include="..\Lynk.API.Services\Lynk.API.Services.csproj" />
+    <ProjectReference Include="..\Lynk.API.Shared\Lynk.API.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using Lynk.API.DataAccess.Data;
 using Lynk.API.Helpers.DIContainer;
+using Lynk.API.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 DIHelper.InjectRepositories(builder.Services);
+DIHelper.InjectServices(builder.Services);
 
 var app = builder.Build();
 
@@ -26,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
