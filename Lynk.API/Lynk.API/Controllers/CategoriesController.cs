@@ -23,5 +23,12 @@ namespace Lynk.API.Controllers
             var response = await _categoryService.CreateCategoryAsync(request);
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var response = await _categoryService.GetAllAsync();
+            return Ok(response);
+        }
     }
 }

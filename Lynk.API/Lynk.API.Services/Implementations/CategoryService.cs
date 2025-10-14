@@ -35,5 +35,17 @@ namespace Lynk.API.Services.Implementations
                 UrlHandle = category.UrlHandle
             };
         }
+
+        public async Task<IEnumerable<CategoryDto>> GetAllAsync()
+        {
+            var categories = await _categoryRepository.GetAllAsync();
+
+            return categories.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                UrlHandle = c.UrlHandle
+            });
+        }
     }
 }

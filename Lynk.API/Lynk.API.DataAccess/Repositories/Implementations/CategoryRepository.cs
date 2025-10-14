@@ -1,6 +1,7 @@
 ﻿using Lynk.API.DataAccess.Data;
 using Lynk.API.DataAccess.Repositories.Abstractions;
 using Lynk.API.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lynk.API.DataAccess.Repositories.Implementations
 {
@@ -19,6 +20,11 @@ namespace Lynk.API.DataAccess.Repositories.Implementations
             await dbContext.SaveChangesAsync();
 
             return category;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await dbContext.Categories.ToListAsync();
         }
     }
 }
