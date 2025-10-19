@@ -18,7 +18,9 @@ namespace Lynk.API.Services.Implementations
         public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryRequestDto request)
         {
             if (string.IsNullOrWhiteSpace(request.Name))
+            {
                 throw new AppException("Category name is required");
+            }
 
             var category = new Category
             {
@@ -40,12 +42,77 @@ namespace Lynk.API.Services.Implementations
         {
             var categories = await _categoryRepository.GetAllAsync();
 
-            return categories.Select(c => new CategoryDto
+            return categories.Select(category => new CategoryDto
             {
-                Id = c.Id,
-                Name = c.Name,
-                UrlHandle = c.UrlHandle
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
             });
+        }
+
+        public async Task<CategoryDto?> GetByIdAsync(Guid id)
+        {
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            if (category == null)
+                return null;
+
+            return new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+        }
+
+        public async Task<CategoryDto?> UpdateAsync(Guid id, UpdateCategoryRequestDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Name))
+            {
+                throw new AppException("Category name is required.");
+            }
+
+            var existingCategory = await _categoryRepository.GetByIdAsync(id);
+
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            existingCategory.Name = request.Name;
+            existingCategory.UrlHandle = request.UrlHandle;
+
+            var updatedCategory = await _categoryRepository.UpdateAsync(existingCategory);
+
+            return new CategoryDto
+            {
+                Id = updatedCategory.Id,
+                Name = updatedCategory.Name,
+                UrlHandle = updatedCategory.UrlHandle
+            };
+        }
+
+        public async Task<DeleteCategoryRequestDto?> DeleteAsync(Guid id)
+        {
+            var existingCategory = await _categoryRepository.GetByIdAsync(id);
+
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            var deletedCategory = await _categoryRepository.DeleteAsync(id);
+
+            return new DeleteCategoryRequestDto
+            {
+                Message = "Category deleted successfully.",
+                DeletedCategory = new CategoryDto
+                {
+                    Id = deletedCategory.Id,
+                    Name = deletedCategory.Name,
+                    UrlHandle = deletedCategory.UrlHandle
+                }
+            };
         }
     }
 }

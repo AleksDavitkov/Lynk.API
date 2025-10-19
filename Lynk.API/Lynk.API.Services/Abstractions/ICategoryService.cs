@@ -6,5 +6,8 @@ namespace Lynk.API.Services.Abstractions
     {
         Task<CategoryDto> CreateCategoryAsync(CreateCategoryRequestDto request);
         Task<IEnumerable<CategoryDto>> GetAllAsync();
+        Task<CategoryDto?> GetByIdAsync(Guid id);
+        Task<CategoryDto?> UpdateAsync(Guid id, UpdateCategoryRequestDto request);
+        Task<DeleteCategoryRequestDto?> DeleteAsync(Guid id);
     }
 }
