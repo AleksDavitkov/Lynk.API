@@ -37,12 +37,6 @@ namespace Lynk.API.Controllers
         public async Task<IActionResult> GetCategoryById([FromRoute] Guid id)
         {
             var response = await _categoryService.GetByIdAsync(id);
-
-            if (response == null)
-            {
-                return NotFound();
-            }
-
             return Ok(response);
         }
 
@@ -51,12 +45,6 @@ namespace Lynk.API.Controllers
         public async Task<IActionResult> EditCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDto request)
         {
             var updatedCategory = await _categoryService.UpdateAsync(id, request);
-
-            if (updatedCategory == null)
-            {
-                return NotFound();
-            }
-
             return Ok(updatedCategory);
         }
 
@@ -65,12 +53,6 @@ namespace Lynk.API.Controllers
         public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var response = await _categoryService.DeleteAsync(id);
-
-            if (response == null)
-            {
-                return NotFound(new { Message = "Category not found." }); // will update rest of CRU ops with customs later
-            }
-
             return Ok(response);
         }
     }

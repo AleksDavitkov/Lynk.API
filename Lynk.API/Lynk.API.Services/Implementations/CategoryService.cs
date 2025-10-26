@@ -55,7 +55,9 @@ namespace Lynk.API.Services.Implementations
             var category = await _categoryRepository.GetByIdAsync(id);
 
             if (category == null)
-                return null;
+            {
+                throw new KeyNotFoundException("Category not found.");
+            }
 
             return new CategoryDto
             {
@@ -76,7 +78,7 @@ namespace Lynk.API.Services.Implementations
 
             if (existingCategory == null)
             {
-                return null;
+                throw new KeyNotFoundException("Category not found.");
             }
 
             existingCategory.Name = request.Name;
@@ -98,7 +100,7 @@ namespace Lynk.API.Services.Implementations
 
             if (existingCategory == null)
             {
-                return null;
+                throw new KeyNotFoundException("Category not found.");
             }
 
             var deletedCategory = await _categoryRepository.DeleteAsync(id);
