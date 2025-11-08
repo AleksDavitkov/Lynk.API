@@ -12,6 +12,7 @@ namespace Lynk.API.Helpers.DIContainer
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+            //services.AddScoped<IImageRepository, ImageRepository>();
         }
 
         public static void InjectServices(IServiceCollection services)

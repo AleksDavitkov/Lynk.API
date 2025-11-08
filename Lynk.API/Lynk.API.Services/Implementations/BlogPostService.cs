@@ -133,6 +133,35 @@ namespace Lynk.API.Services.Implementations
             };
         }
 
+        public async Task<BlogPostDto?> GetByUrlHandleAsync(string urlHandle)
+        {
+            var blogPost = await _blogPostRepository.GetByUrlHandleAsync(urlHandle);
+
+            if (blogPost == null)
+            {
+                throw new KeyNotFoundException($"Blog post with URL handle '{urlHandle}' not found");
+            }
+
+            return new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Title = blogPost.Title,
+                ShortDescription = blogPost.ShortDescription,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                UrlHandle = blogPost.UrlHandle,
+                PublishedDate = blogPost.PublishedDate,
+                Author = blogPost.Author,
+                IsVisible = blogPost.IsVisible,
+                Categories = blogPost.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    UrlHandle = c.UrlHandle
+                }).ToList()
+            };
+        }
+
         public async Task<BlogPostDto> UpdateAsync(Guid id, UpdateBlogPostRequestDto request)
         {
             var existingBlogPost = await _blogPostRepository.GetByIdAsync(id);
@@ -190,6 +219,37 @@ namespace Lynk.API.Services.Implementations
                     Id = x.Id,
                     Name = x.Name,
                     UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+        }
+
+        public async Task<BlogPostDto> DeleteAsync(Guid id)
+        {
+            var blogPost = await _blogPostRepository.GetByIdAsync(id);
+
+            if (blogPost == null)
+            {
+                throw new KeyNotFoundException($"Blog post with ID '{id}' not found");
+            }
+
+            var deletedBlogPost = await _blogPostRepository.DeleteAsync(id);
+
+            return new BlogPostDto
+            {
+                Id = deletedBlogPost.Id,
+                Title = deletedBlogPost.Title,
+                ShortDescription = deletedBlogPost.ShortDescription,
+                Content = deletedBlogPost.Content,
+                FeaturedImageUrl = deletedBlogPost.FeaturedImageUrl,
+                UrlHandle = deletedBlogPost.UrlHandle,
+                PublishedDate = deletedBlogPost.PublishedDate,
+                Author = deletedBlogPost.Author,
+                IsVisible = deletedBlogPost.IsVisible,
+                Categories = deletedBlogPost.Categories.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    UrlHandle = c.UrlHandle
                 }).ToList()
             };
         }

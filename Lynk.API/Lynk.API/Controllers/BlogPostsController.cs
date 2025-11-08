@@ -42,12 +42,29 @@ namespace Lynk.API.Controllers
             return Ok(blogPost);
         }
 
+        // GET: http://localhost:port/api/blogposts/{urlHandle}
+        [HttpGet("urlHandle/{urlHandle}")]
+        public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
+        {
+            var blogPost = await _blogPostService.GetByUrlHandleAsync(urlHandle);
+            return Ok(blogPost);
+        }
+
+
         // PUT: http://localhost:port/api/blogposts/{id}
         [HttpPut("{id:Guid}")]
         public async Task<IActionResult> UpdateBlogPostById([FromRoute] Guid id, [FromBody] UpdateBlogPostRequestDto request)
         {
             var updatedBlogPost = await _blogPostService.UpdateAsync(id, request);
             return Ok(updatedBlogPost);
+        }
+
+        // DELETE: http://localhost:port/api/blogposts/{id}
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
+        {
+            var deletedBlogPost = await _blogPostService.DeleteAsync(id);
+            return Ok(deletedBlogPost);
         }
     }
 }

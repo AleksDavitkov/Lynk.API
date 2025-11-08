@@ -31,6 +31,11 @@ namespace Lynk.API.DataAccess.Repositories.Implementations
             return await dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<BlogPost?> GetByUrlHandleAsync(string urlHandle)
+        {
+            return await dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+        }
+
         public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)
         {
             var existingBlogPost = await dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == blogPost.Id);
@@ -43,6 +48,21 @@ namespace Lynk.API.DataAccess.Repositories.Implementations
             dbContext.Entry(existingBlogPost).CurrentValues.SetValues(blogPost);
             existingBlogPost.Categories = blogPost.Categories;
 
+            await dbContext.SaveChangesAsync();
+
+            return existingBlogPost;
+        }
+
+        public async Task<BlogPost?> DeleteAsync(Guid id)
+        {
+            var existingBlogPost = await dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingBlogPost == null)
+            {
+                return null;
+            }
+
+            dbContext.BlogPosts.Remove(existingBlogPost);
             await dbContext.SaveChangesAsync();
 
             return existingBlogPost;
